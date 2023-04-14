@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApiService } from '../../../services/api.service';
 
 
 @Component({
@@ -10,10 +11,14 @@ import { Router } from '@angular/router';
 export class LoginComponent {
 
   constructor(
-    private router:Router
+    private router:Router,
+    private apiService: ApiService
   ) { }
 
   login(){
+    // this.apiService.login('login', this.loginForm.value).then((response) => {
+
+    // })
     this.router.navigate(['/dashboard']);
   }
 
