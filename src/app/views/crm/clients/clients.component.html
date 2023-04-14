@@ -1,0 +1,161 @@
+<c-row ngPreserveWhitespaces>
+    <c-col xs="12">
+      <c-card class="mb-4">
+
+        <c-card-header class="d-flex align-items-center">
+          <button *ngIf="showForm" cButton size="sm" (click)="toggleFormTable('table')">Back</button>
+          <strong class="mx-2">{{showTable? "Clients" : "Add Client"}}</strong> 
+        </c-card-header>
+
+        <c-card-body>
+
+            <div *ngIf="showTable">
+                <div class="w-100 d-flex justify-content-between">
+                    <div class="w-100">
+                      <button cButton class="my-2" color="primary" type="submit" (click)="toggleFormTable('form')">
+                          Add Client
+                      </button>
+                      <c-button-group aria-label="Basic example" role="group">
+                        <button cButton class="" color="primary">PDF</button>
+                        <button cButton class="" color="primary">Excel</button>
+                      </c-button-group>
+                    </div>
+                    <div class="w-100 d-flex align-items-center">
+                      <!-- <div class="w-100 me-1">
+                        <select aria-label="Default select example" cSelect>
+                          <option>Select Status</option>
+                          <option value="1">On Transit</option>
+                          <option value="2">Arrived</option>
+                        </select>
+                      </div> -->
+                      <div class="w-100 me-1">
+                        <input cFormControl
+                          id="exampleFormControlInput1"
+                          placeholder="Search..."
+                          type="text"
+                          />
+                      </div>
+                    </div>
+                </div>
+                <table cTable>
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Address</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let client of clients, let i = index">
+                        <th scope="row">{{i+1}}</th>
+                        <td>{{client.first_name}} {{client.last_name}}</td>
+                        <td>{{client.email}}</td>
+                        <td>{{client.phone}}</td>
+                        <td>{{client.region}}, {{client.address}}</td>
+                        <td>
+                            <c-button-group aria-label="Basic example" role="group">
+                                <button cButton color="primary">Details</button>
+                                <button cButton color="primary">Update</button>
+                                <button cButton color="primary">Del</button>
+                            </c-button-group>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="showForm">
+                <form [formGroup]="clientForm" cForm class="my-2">
+
+                    <div class="d-flex my-2">
+                        <div class="w-100 me-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">First Name</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="First Name e.g Jane"
+                            type="text"
+                            formControlName="first_name"
+                            name="first_name"
+                           />
+                        </div>
+                        <div class="w-100 ms-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Last Name</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="Last Name e.g  Love"
+                            type="text"
+                            formControlName="last_name"
+                            name="last_name"
+                           />
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Email</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="jane@example.com"
+                            type="email"
+                            formControlName="email"
+                            name="email"
+                           />
+                        </div>
+                        <div class="mb-3 w-100 ms-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Phone Number</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="+255 788 999 233"
+                            type="text"
+                            max="13"
+                            formControlName="phone"
+                            name="phone"
+                           />
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <select aria-label="Default select example" cSelect formControlName="region"
+                          name="region">
+                            <option>Select Region</option>
+                            <option value="dar es salaam">Dar Es Salaam</option>
+                            <option value="mwanza">Mwanza</option>
+                            <option value="mbeya">Mbeya</option>
+                          </select>
+                        </div>
+                        <div class="mb-3 w-100 ms-1">
+                            <input cFormControl
+                                id="exampleFormControlInput1"
+                                placeholder="Address e.g Morrocco"
+                                type="text"
+                                formControlName="address"
+                                name="address"
+                           />
+                        </div>
+                    </div>                                       
+                </form>
+            </div>
+            
+        </c-card-body>
+
+        <c-card-footer>
+            <div *ngIf="showForm" class="d-flex flex-row-reverse">
+                <button cButton color="primary" (click)="createClient()">
+                  <c-spinner *ngIf="isLoading" size="sm"></c-spinner>
+                  Save
+                </button>
+            </div>
+            <div *ngIf="showTable" class="d-flex flex-row-reverse">
+                <span>All Users</span>
+            </div>
+        </c-card-footer>
+
+      </c-card>
+
+    </c-col>
+
+</c-row>

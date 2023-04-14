@@ -1,0 +1,429 @@
+<c-row ngPreserveWhitespaces>
+    <c-col xs="12">
+      <c-card class="mb-4">
+        <c-card-header class="d-flex">
+          <button *ngIf="showForm || showDelivery" cButton size="sm" (click)="toggleFormTable('table')">Back</button>
+          <strong class="mx-2">
+            {{showTable? "Deliveries" : ""}}
+            {{showForm? "Deliveries" : ""}}
+            {{showDelivery? "Delivery | "+ delivery.tracking_code : ""}}
+          </strong> 
+        </c-card-header>
+        <c-card-body>
+
+            <c-alert *ngIf="showAlert" color="warning">
+              {{message}}
+            </c-alert>
+
+            <div *ngIf="showTable">
+              <div class="w-100 d-flex justify-content-between">
+                <div class="w-100">
+                  <button cButton class="my-2" color="primary" type="submit" (click)="toggleFormTable('form')">
+                      Add Delivery
+                  </button>
+                  <c-button-group aria-label="Basic example" role="group">
+                    <button cButton class="" color="primary">PDF</button>
+                    <button cButton class="" color="primary">Excel</button>
+                  </c-button-group>
+                </div>
+                <div class="w-100 d-flex align-items-center">
+                  <div class="w-100 me-1">
+                    <select aria-label="Default select example" cSelect formControlName="delivery_status"
+                    name="delivery_status">
+                      <option>Select Status</option>
+                      <option value="on transit">On Transit</option>
+                      <option value="arrived">Arrived</option>
+                    </select>
+                  </div>
+                  <div class="w-100 me-1">
+                    <input cFormControl
+                      id="exampleFormControlInput1"
+                      placeholder="Search..."
+                      type="text"
+                      />
+                  </div>
+                </div>
+              </div>
+              <table cTable>
+                  <thead>
+                  <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Track</th>
+                  <th scope="col">From</th>
+                  <th scope="col">To</th>
+                  <th scope="col">Sender</th>
+                  <th scope="col">Reciever</th>
+                  <th scope="col">Arrival</th>
+                  <th scope="col">Status</th>
+                  <th scope="col"></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let delivery of deliveries, let i = index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{delivery.tracking_code}}</td>
+                    <td>{{delivery.from_region}} {{delivery.from_branch_name}}</td>
+                    <td>{{delivery.to_region}} {{delivery.to_branch_name}}</td>
+                    <td>{{delivery.sender_first_name}} {{delivery.sender_last_name}}</td>
+                    <td>{{delivery.reciever_first_name}} {{delivery.reciever_last_name}}</td>
+                    <td>{{delivery.arrival_date}}</td>
+                    <td>
+                        <c-badge color="secondary">{{delivery.delivery_status}}</c-badge>
+                    </td>
+                    <td>
+                        <c-button-group aria-label="Basic example" role="group">
+                            <button cButton color="primary" (click)="getDelivery(delivery.id)">Details</button>
+                            <button cButton color="primary">Update</button>
+                            <button cButton color="primary">Del</button>
+                        </c-button-group>
+                    </td>
+                  </tr>
+                  </tbody>
+              </table>
+            </div>
+
+            <div *ngIf="showForm">
+                <form [formGroup]="deliveryForm" cForm class="my-2">
+                    <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <label cLabel for="exampleFormControlInput1">From</label>
+                          <select aria-label="Default select example" cSelect formControlName="from_branch_id" name="from_branch_id">
+                            <option>Select Origin</option>
+                            <option *ngFor="let branch of branches" value={{branch.branch_id}}>{{branch.region}} {{branch.branch_name}}</option>
+                          </select>
+                        </div>
+                        <div class="mb-3 w-100 ms-1">
+                          <label cLabel for="exampleFormControlInput1">To</label>
+                          <select aria-label="Default select example" cSelect formControlName="to_branch_id" name="to_branch_id">
+                            <option>Select Destination</option>
+                            <option *ngFor="let branch of branches" value={{branch.branch_id}}>{{branch.region}} {{branch.branch_name}} </option>
+                          </select>
+                        </div>
+                    </div>
+                    <span>Sender Details</span>
+                    <div class="d-flex my-2">
+                        <div class="w-100 me-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">First Name</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="Jane"
+                            type="text"
+                            formControlName="sender_first_name"
+                            name="sender_first_name"
+                           />
+                        </div>
+                        <div class="w-100 ms-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Last Name</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="Love"
+                            type="text"
+                            formControlName="sender_last_name"
+                            name="sender_last_name"
+                           />
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Email</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="jane@example.com"
+                            type="email"
+                            formControlName="sender_email"
+                            name="sender_email"
+                           />
+                        </div>
+                        <div class="mb-3 w-100 ms-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Phone Number</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="+255 788 999 233"
+                            type="text"
+                            formControlName="sender_phone"
+                            name="sender_phone"
+                           />
+                        </div>
+                    </div>
+
+                    <span>Reciever Details</span>
+                    <div class="d-flex my-2">
+                        <div class="w-100 me-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">First Name</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="Jane"
+                            type="text"
+                            formControlName="reciever_first_name"
+                            name="reciever_first_name"
+                           />
+                        </div>
+                        <div class="w-100 ms-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Last Name</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="Love"
+                            type="text"
+                            formControlName="reciever_last_name"
+                            name="reciever_last_name"
+                           />
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Email</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="jane@example.com"
+                            type="email"
+                            formControlName="reciever_email"
+                            name="reciever_email"
+                           />
+                        </div>
+                        <div class="mb-3 w-100 ms-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Phone Number</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="+255 788 999 233"
+                            type="text"
+                            formControlName="reciever_phone"
+                            name="reciever_phone"
+                           />
+                        </div>
+                    </div>
+
+                    <span>Delivery Details</span>
+                    <div class="d-flex my-2">
+                        <div class="w-100 me-1">
+                          <!-- <label cLabel for="exampleFormControlInput1"></label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="Package Value TZS 100,000"
+                            type="number"
+                            formControlName="package_value"
+                            name="package_value"
+                           />
+                        </div>
+                        <div class="w-100 ms-1">
+                           <input cFormControl
+                            type="text" 
+                            placeholder="Arrival Date" 
+                            onfocus="(this.type='date')" 
+                            onblur="(this.type='text')"
+                            formControlName="arrival_date"
+                            name="arrival_date"
+                            />
+
+                        </div>
+                    </div>
+                    <div class="d-flex my-2">
+                        <div class="w-100 me-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Package Value</label> -->
+                          <select aria-label="Default select example" cSelect formControlName="courier_id" name="courier_id">
+                            <option>Select Courier</option>
+                            <option *ngFor="let courier of couriers" value={{courier.id}}>{{courier.courier_name}}</option>
+                          </select>
+                        </div>
+                        <div class="w-100 ms-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Arrival Date</label> -->
+                          <select aria-label="Default select example" cSelect formControlName="delivery_status" name="delivery_status">
+                            <option>Delivery Status</option>
+                            <option value="on transit">On Transit</option>
+                            <option value="arrived">Arrived</option>
+                          </select>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <label cLabel for="exampleFormControlInput1">Description</label>
+                          <textarea cFormControl id="exampleFormControlTextarea1" rows="3"
+                          formControlName="description" name="description"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <label cLabel for="exampleFormControlInput1">Sender</label>
+                          <select aria-label="Default select example" cSelect>
+                            <option>Select Sender</option>
+                            <option value="1">John Doe</option>
+                            <option value="2">Jack Lo</option>
+                            <option value="3">Mark Lee</option>
+                          </select>
+                        </div>
+                        <div class="mb-3 w-100 ms-1">
+                          <label cLabel for="exampleFormControlInput1">Reciever</label>
+                          <select aria-label="Default select example" cSelect>
+                            <option>Select Reciever</option>
+                            <option value="1">John Doe</option>
+                            <option value="2">Jack Lo</option>
+                            <option value="3">Mark Lee</option>
+                          </select>
+                        </div>
+                    </div> -->
+                    <span>Payment Details</span>
+                    <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Amount</label> -->
+                          <select aria-label="Default select example" cSelect formControlName="payment_option" name="payment_option">
+                            <option>Payment Options</option>
+                            <option value="pay on delivery">Pay On Delivery</option>
+                            <option value="cash">Cash</option>
+                          </select>
+                        </div>
+                        <div class="mb-3 w-100 me-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">Amount</label> -->
+                          <input cFormControl
+                            id="exampleFormControlInput1"
+                            placeholder="Amount Paid, TZS 50,000"
+                            type="number"
+                            formControlName="amount_paid" name="amount_paid"
+                            />
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div *ngIf="showDelivery" id="pdfPage" #pdfPage="">
+                <div class="my-2">
+                    <div class="d-flex">
+                      <div class="w-100 d-flex">
+                        <!-- <img alt="logo" src="../../../../assets/img/brand/logistics_black.png" width="80" height="80" /> -->
+                        <div class="mx-1">
+                          <h3>Smart Deliveries</h3>
+                          <i>Safe & Fast</i>
+                        </div>
+                      </div>
+                      <div class="w-100">
+                        Dar Es Salaam, Mbezi<br>
+                        07888 900 092/0678 122 303<br>
+                        info@smart.com<br>
+                      </div>
+                    </div>
+                    <hr/>
+                    <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <h4>Track Code {{delivery.tracking_code}}</h4>
+                        </div>
+                        <div class="mb-3 w-100 ms-1">
+                          <!-- <label cLabel for="exampleFormControlInput1">To</label>
+                          Mwanza, Sokoni -->
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <label cLabel for="exampleFormControlInput1">From</label>
+                          {{delivery.from_region}}
+                          {{delivery.from_branch_name}}
+                        </div>
+                        <div class="mb-3 w-100 ms-1">
+                          <label cLabel for="exampleFormControlInput1">To</label>
+                          {{delivery.to_region}}
+                          {{delivery.to_branch_name}}
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <div class="w-100 me-1">
+                        <span>Sender Details</span>
+                        <hr/>
+                        <div class="d-flex my-2">
+                            <div class="w-100 me-1">
+                              {{delivery.sender_first_name}}
+                              {{delivery.sender_last_name}}
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="mb-3 w-100 me-1">
+                              {{delivery.sender_email}}
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="mb-3 w-100 me-1">
+                              {{delivery.sender_phone}}
+                            </div>
+                        </div>
+                      </div>
+                      <div class="w-100">
+                        <span>Reciever Details</span>
+                        <hr/>
+                        <div class="d-flex my-2">
+                            <div class="w-100 me-1">
+                              {{delivery.reciever_first_name}}
+                              {{delivery.reciever_last_name}}
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="mb-3 w-100 me-1">
+                              {{delivery.reciever_email}}
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="mb-3 w-100 me-1">
+                              {{delivery.reciever_phone}}
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <span>Delivery Details</span>
+                    <hr/>
+                    <div class="d-flex my-2">
+                        <div class="w-100 me-1">
+                          Package Value TZS {{delivery.package_value}}
+                        </div>
+                        <div class="w-100 ms-1">
+                           Arrival Date {{delivery.arrival_date}}
+                        </div>
+                    </div>
+                    <div class="d-flex my-2">
+                        <div class="w-100 me-1">
+                           Courier {{delivery.courier_name}}
+                        </div>
+                        <div class="w-100 ms-1">
+                          Delivery Status {{delivery.delivery_status}}
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="mb-3 w-100 me-1">
+                          <label cLabel for="exampleFormControlInput1">Description</label>
+                          <hr/>
+                          {{delivery.description}}
+
+                        </div>
+                    </div>
+
+                    <span>Payment Details</span>
+                    <hr>
+                    <div class="d-flex">
+                      <div class="mb-3 w-100 me-1">
+                        Payment Options {{delivery.payment_option}}
+                      </div>
+                      <div class="mb-3 w-100 me-1">
+                        Amount Paid TZS {{delivery.amount_paid}}
+                      </div>
+                    </div>
+                </div>
+            </div>
+            
+        </c-card-body>
+        <c-card-footer>
+            <div *ngIf="showForm || showDelivery" class="d-flex flex-row-reverse">
+                <button *ngIf="showForm" cButton color="primary" (click)="createDelivery();">
+                  <c-spinner *ngIf="isLoading" size="sm"></c-spinner>
+                  Save
+                </button>
+                <button *ngIf="showDelivery" cButton color="primary" (click)="printDelivery();">
+                  <c-spinner *ngIf="isLoading" size="sm"></c-spinner>
+                  Print Reciept
+                </button>
+            </div>
+            <div *ngIf="showTable" class="d-flex flex-row-reverse">
+                <span>All Deliveries</span>
+            </div>
+            <!-- <button cButton color="primary">Clear</button> -->
+        </c-card-footer>
+      </c-card>
+    </c-col>
+</c-row>
