@@ -5,14 +5,19 @@
         <c-card-group>
           <c-card class="p-4">
             <c-card-body>
-              <form cForm>
+              
+              <c-alert *ngIf="showAlert" color="warning">
+                {{message}}
+              </c-alert>
+
+              <form  [formGroup]="loginForm" cForm>
                 <h1>Login</h1>
                 <p class="text-medium-emphasis">Sign In to your account</p>
                 <c-input-group class="mb-3">
                   <span cInputGroupText>
                     <svg cIcon name="cilUser"></svg>
                   </span>
-                  <input autoComplete="username" cFormControl placeholder="Username" />
+                  <input autoComplete="username" cFormControl placeholder="Username" formControlName="username" name="username" />
                 </c-input-group>
                 <c-input-group class="mb-4">
                   <span cInputGroupText>
@@ -23,6 +28,7 @@
                     cFormControl
                     placeholder="Password"
                     type="password"
+                    formControlName="password" name="password"
                   />
                 </c-input-group>
                 <c-row>

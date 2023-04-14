@@ -9,10 +9,20 @@ import {HttpClient} from "@angular/common/http";
 export class ApiService {
 
   baseUrl = 'http://127.0.0.1:8000/api/'
+  _baseUrl = 'https://tms.server.nexent.dev/api/'
 
   constructor(
     private httpClient: HttpClient
   ) { }
+
+  async login(url: any, data: any){
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(this.baseUrl + url, data, {
+      }).subscribe((value) => {
+        resolve(value)
+      })
+    })
+  }
 
   async getData(url: any){
     return new Promise<any>((resolve, reject) => {
