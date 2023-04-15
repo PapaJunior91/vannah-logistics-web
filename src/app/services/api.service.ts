@@ -8,8 +8,8 @@ import {HttpClient} from "@angular/common/http";
 })
 export class ApiService {
 
-  baseUrl = 'http://127.0.0.1:8000/api/'
-  _baseUrl = 'https://tms.server.nexent.dev/api/'
+  _baseUrl = 'http://127.0.0.1:8000/api/'
+  baseUrl = 'https://tms.server.nexent.dev/api/'
 
   constructor(
     private httpClient: HttpClient
