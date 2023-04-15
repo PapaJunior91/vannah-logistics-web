@@ -11,7 +11,7 @@
         </c-card-header>
         <c-card-body>
 
-            <c-alert *ngIf="showAlert" color="warning">
+            <c-alert *ngIf="showAlert" [color]="severity">
               {{message}}
             </c-alert>
 
@@ -71,7 +71,7 @@
                         <c-button-group aria-label="Basic example" role="group">
                             <button cButton color="primary" (click)="getDelivery(delivery.id)">Details</button>
                             <button cButton color="primary" (click)="editDelivery(delivery.id)">Update</button>
-                            <button cButton color="primary">Del</button>
+                            <button cButton color="primary">Archive</button>
                         </c-button-group>
                       </td>
                     </tr>
@@ -86,14 +86,14 @@
                           <label cLabel for="exampleFormControlInput1">From</label>
                           <select aria-label="Default select example" cSelect formControlName="from_branch_id" name="from_branch_id">
                             <option>Select Origin</option>
-                            <option *ngFor="let branch of branches" value={{branch.branch_id}}>{{branch.region}} {{branch.branch_name}}</option>
+                            <option *ngFor="let branch of branches" [ngValue]="branch">{{branch.region}} {{branch.branch_name}}</option>
                           </select>
                         </div>
                         <div class="mb-3 w-100 ms-1">
                           <label cLabel for="exampleFormControlInput1">To</label>
                           <select aria-label="Default select example" cSelect formControlName="to_branch_id" name="to_branch_id">
                             <option>Select Destination</option>
-                            <option *ngFor="let branch of branches" value={{branch.branch_id}}>{{branch.region}} {{branch.branch_name}} </option>
+                            <option *ngFor="let branch of branches" [ngValue]="branch">{{branch.region}} {{branch.branch_name}} </option>
                           </select>
                         </div>
                     </div>
@@ -107,7 +107,6 @@
                             type="text"
                             formControlName="sender_first_name"
                             name="sender_first_name"
-                            [value]="delivery.sender_first_name"
                            />
                         </div>
                         <div class="w-100 ms-1">
@@ -219,7 +218,7 @@
                           <!-- <label cLabel for="exampleFormControlInput1">Package Value</label> -->
                           <select aria-label="Default select example" cSelect formControlName="courier_id" name="courier_id">
                             <option>Select Courier</option>
-                            <option *ngFor="let courier of couriers" value={{courier.id}}>{{courier.courier_name}}</option>
+                            <option *ngFor="let courier of couriers" [ngValue]="courier">{{courier.courier_name}}</option>
                           </select>
                         </div>
                         <div class="w-100 ms-1">
@@ -228,6 +227,7 @@
                             <option>Delivery Status</option>
                             <option value="on transit">On Transit</option>
                             <option value="arrived">Arrived</option>
+                            <option value="delayed">Delayed</option>
                           </select>
                         </div>
                     </div>
@@ -240,26 +240,6 @@
                         </div>
                     </div>
 
-                    <!-- <div class="d-flex">
-                        <div class="mb-3 w-100 me-1">
-                          <label cLabel for="exampleFormControlInput1">Sender</label>
-                          <select aria-label="Default select example" cSelect>
-                            <option>Select Sender</option>
-                            <option value="1">John Doe</option>
-                            <option value="2">Jack Lo</option>
-                            <option value="3">Mark Lee</option>
-                          </select>
-                        </div>
-                        <div class="mb-3 w-100 ms-1">
-                          <label cLabel for="exampleFormControlInput1">Reciever</label>
-                          <select aria-label="Default select example" cSelect>
-                            <option>Select Reciever</option>
-                            <option value="1">John Doe</option>
-                            <option value="2">Jack Lo</option>
-                            <option value="3">Mark Lee</option>
-                          </select>
-                        </div>
-                    </div> -->
                     <span>Payment Details</span>
                     <div class="d-flex">
                         <div class="mb-3 w-100 me-1">
@@ -408,7 +388,7 @@
         </c-card-body>
         <c-card-footer>
             <div *ngIf="showForm || showDelivery" class="d-flex flex-row-reverse">
-                <button *ngIf="showForm" cButton color="primary" (click)="createDelivery();">
+                <button *ngIf="showForm" cButton color="primary" (click)="saveDelivery();">
                   <c-spinner *ngIf="isLoading" size="sm"></c-spinner>
                   Save
                 </button>

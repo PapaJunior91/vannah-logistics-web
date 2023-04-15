@@ -38,6 +38,7 @@ export class LoginComponent {
     this.isLoading = true
     this.apiService.login('login', this.loginForm.value).then((response: any) => {
       if(response.success){
+        localStorage.setItem('userId', response.data.id)
         this.router.navigate(['/dashboard']);
       }else{
         this.message = response.message

@@ -34,6 +34,7 @@
                 <c-row>
                   <c-col xs="6">
                     <button cButton class="px-4" color="primary" (click)="login()">
+                      <c-spinner *ngIf="isLoading" size="sm"></c-spinner>
                       Login
                     </button>
                   </c-col>

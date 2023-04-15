@@ -42,4 +42,13 @@ export class ApiService {
     })
   }
 
+  async updateData(url: any, data: any){
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.put(this.baseUrl + url, data, {
+      }).subscribe((value) => {
+        resolve(value)
+      })
+    })
+  }
+
 }

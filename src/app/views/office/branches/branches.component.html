@@ -95,9 +95,7 @@
                           <select aria-label="Default select example" cSelect name="region"
                           formControlName="region">
                             <option>Select Region</option>
-                            <option value="dar es salaam">Dar Es Salaam</option>
-                            <option value="mwanza">Mwanza</option>
-                            <option value="mbeya">Mbeya</option>
+                            <option *ngFor="let region of regions" [value]="region.region_name">{{region.region_name}}</option>
                           </select>
                         </div>
                     </div>

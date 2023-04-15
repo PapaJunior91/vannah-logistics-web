@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { cilArrowLeft } from '@coreui/icons';
 import { ApiService } from '../../../services/api.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 
 
 declare var require: any;
@@ -22,22 +22,45 @@ export class DeliveryComponent implements OnInit {
   @ViewChild('pdfPage') pdfPage!: ElementRef;
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    private formBuilder: FormBuilder,
+
   ) { }
 
-  showTable = true
-  showForm = false
-  showDelivery = false
-  showAlert:boolean = false;
-  isLoading:boolean = false
+  showForm: boolean = false
+  showTable: boolean = true
+  showAlert: boolean = false
+  isLoading: boolean = false
+  showDelivery: boolean = false
 
-  delivery: any
   deliveries: Array<any> = <any>[]
   branches: Array<any> = <any>[]
   couriers: Array<any> = <any>[]
+  formFields: Array<any> = <any>[
+    'sender_first_name', 
+    'sender_last_name', 
+    'sender_phone',
+    'sender_email',
+    'reciever_first_name',
+    'reciever_last_name',
+    'reciever_phone',
+    'reciever_email',
+    'package_value',
+    'description',
+    'amount_paid',
+    'arrival_date',
+    'delivery_status',
+    'payment_option'
+  ]
+  
+  deliveryId: number = 0
+  formState: string = "create"
 
   deliveryForm: any;
-  message:any;
+  formData: any;
+  message: any;
+  severity: any;
+  delivery: any
 
   icons = { cilArrowLeft };
 
@@ -49,7 +72,7 @@ export class DeliveryComponent implements OnInit {
   }
 
   initiateForm(){
-    this.deliveryForm = new FormGroup({
+    this.deliveryForm = this.formBuilder.group({
       sender_first_name: new FormControl(""),
       sender_last_name: new FormControl(""),
       sender_phone: new FormControl(""),
@@ -60,7 +83,7 @@ export class DeliveryComponent implements OnInit {
       reciever_email: new FormControl(""),
       from_branch_id: new FormControl(""),
       to_branch_id: new FormControl(""),
-      courier_id: new FormControl(""),
+      courier_id: new FormControl(),
       package_value: new FormControl(""),
       delivery_status: new FormControl(""),
       arrival_date: new FormControl(""),
@@ -76,26 +99,47 @@ export class DeliveryComponent implements OnInit {
     })
   }
 
-  async getCouriers(){
-    this.couriers = await this.apiService.getData('couriers').then((response) => {
-      return response.data;
-    })
-  }
-
   async getDeliveries(){
     this.deliveries = await this.apiService.getData('deliveries').then((response) => {
       return response.data;
     })
   }
 
-  createDelivery(){
+  async getCouriers(){
+    this.couriers = await this.apiService.getData('couriers').then((response) => {
+      return response.data;
+    })
+  }
+
+  saveDelivery(){
     this.isLoading = true
-    this.apiService.postData('deliveries', this.deliveryForm.value).then((response) => {
+    this.formData = this.deliveryForm.value
+    this.formData.courier_id = this.deliveryForm.get('courier_id')?.value.id
+    this.formData.from_branch_id = this.deliveryForm.get('from_branch_id')?.value.branch_id
+    this.formData.to_branch_id = this.deliveryForm.get('to_branch_id')?.value.branch_id
+
+    if(this.formState == "create")
+      this.createDelivery()
+
+    if(this.formState == "update")
+      this.updateDelivery()
+
+  }
+
+  createDelivery(){
+    
+    this.formData.created_by = localStorage.getItem("userId")
+
+    this.apiService.postData('deliveries', this.formData).then((response) => {
       if(response.success){
+        this.message = response.message
+        this.showAlert = true
+        this.severity = "success"
         this.getDeliveries()
         this.toggleFormTable('table')
         this.deliveryForm.reset()
       }else{
+        this.severity = "warning"
         this.message = response.message
         this.showAlert = true
         setTimeout(() => {
@@ -106,11 +150,47 @@ export class DeliveryComponent implements OnInit {
     })
   }
 
+  updateDelivery(){
+
+    this.formData.sender_id = this.delivery.sender_id
+    this.formData.reciever_id = this.delivery.reciever_id
+
+    this.apiService.updateData(`deliveries/${this.deliveryId}`, this.formData).then((response) => {
+      if(response.success){
+        this.showNotification(response, "success")
+        this.getDeliveries()
+        this.toggleFormTable('table')
+        this.deliveryForm.reset()
+      }else{
+        this.message = response.message
+        this.showAlert = true
+        this.severity = "warning"
+        setTimeout(() => {
+          this.showAlert = false
+        }, 3000);
+      }
+      this.isLoading = false
+    })
+  }
+
   editDelivery(deliveryId: number){
+
+    
+    this.formState = "update"
+    this.deliveryId = deliveryId
     this.delivery = this.deliveries.find(element => element.id === deliveryId);
-    alert(this.delivery.sender_first_name)
-    this.deliveryForm.get("sender_first_name")?.setValue(this.delivery.sender_first_name)
-    // this.classFormGroup.get('name')?.setValue(classDetails.name)
+
+    this.formFields.forEach((field) =>{
+      this.deliveryForm.get(field)?.setValue(this.delivery[field])
+    })
+
+    let toSelect = this.couriers.find(c => c.id == this.delivery.courier_id)
+    let _toSelect = this.branches.find(b => b.branch_id == this.delivery.from_branch_id)
+    let __toSelect = this.branches.find(b => b.branch_id == this.delivery.to_branch_id)
+
+    this.deliveryForm.get('courier_id')?.setValue(toSelect);
+    this.deliveryForm.get('from_branch_id')?.setValue(_toSelect);
+    this.deliveryForm.get('to_branch_id')?.setValue(__toSelect);
 
     this.toggleFormTable('form')
   }
@@ -147,6 +227,17 @@ export class DeliveryComponent implements OnInit {
         this.showForm = false
         break;
     }
+  }
+
+  showNotification(response:any, color:any){
+    this.message = response.message
+    this.showAlert = true
+    this.severity = color
+
+    setTimeout(() => {
+      this.showAlert = false
+    }, 3000);
+
   }
 
 }

@@ -21,6 +21,7 @@ export class BranchesComponent {
 
   users: Array<any> = <any>[]
   branches: Array<any> = <any>[]
+  regions: Array<any> = <any>[]
 
   branchForm: any;
   message:any;
@@ -29,6 +30,7 @@ export class BranchesComponent {
 
   ngOnInit(){
     this.getBranches()
+    this.getRegions()
     this.getUsers()
     this.initiateForm()
   }
@@ -46,6 +48,12 @@ export class BranchesComponent {
 
   async getBranches(){
     this.branches = await this.apiService.getData('branches').then((response) => {
+      return response.data;
+    })
+  }
+
+  async getRegions(){
+    this.regions = await this.apiService.getData('regions').then((response) => {
       return response.data;
     })
   }
