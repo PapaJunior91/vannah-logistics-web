@@ -50,6 +50,9 @@ import {
   WidgetModule 
 } from '@coreui/angular';
 
+// import { MatDialogModule } from '@angular/material;
+
+
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 import { BranchesComponent } from './views/office/branches/branches.component';
 import { UsersComponent } from './views/office/users/users.component';
@@ -117,7 +120,9 @@ const APP_CONTAINERS = [
     HttpClientModule,
     SpinnerModule,
     AlertModule,
-    WidgetModule  
+    WidgetModule,
+    /////////////
+    
   ],
   providers: [
     {

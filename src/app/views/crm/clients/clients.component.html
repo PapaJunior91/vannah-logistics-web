@@ -3,8 +3,12 @@
       <c-card class="mb-4">
 
         <c-card-header class="d-flex align-items-center">
-          <button *ngIf="showForm" cButton size="sm" (click)="toggleFormTable('table')">Back</button>
-          <strong class="mx-2">{{showTable? "Clients" : "Add Client"}}</strong> 
+          <button *ngIf="showForm || showDeliveries" cButton size="sm" (click)="toggleFormTable('table')">Back</button>
+          <strong class="mx-2">
+            {{showTable? "Clients" : ""}}
+            {{showForm? "Client Client" : ""}}
+            {{showDeliveries? "Client Deliveries" : ""}}
+          </strong> 
         </c-card-header>
 
         <c-card-body>
@@ -57,8 +61,8 @@
                         <td>{{client.region}} {{client.address}}</td>
                         <td>
                             <c-button-group aria-label="Basic example" role="group">
-                                <button cButton color="primary">Details</button>
-                                <button cButton color="primary">Update</button>
+                                <button cButton color="primary" (click)="getClientDeliveries(client.id)">Details</button>
+                                <button cButton color="primary" (click)="editClient(client.id)">Update</button>
                                 <button cButton color="primary">Del</button>
                             </c-button-group>
                         </td>
@@ -122,9 +126,7 @@
                           <select aria-label="Default select example" cSelect formControlName="region"
                           name="region">
                             <option>Select Region</option>
-                            <option value="dar es salaam">Dar Es Salaam</option>
-                            <option value="mwanza">Mwanza</option>
-                            <option value="mbeya">Mbeya</option>
+                            <option *ngFor="let region of regions" [value]="region.region_name">{{region.region_name}}</option>
                           </select>
                         </div>
                         <div class="mb-3 w-100 ms-1">
@@ -139,12 +141,89 @@
                     </div>                                       
                 </form>
             </div>
+
+            <div *ngIf="showDeliveries">
+              <c-row>
+                <c-col xs>
+                  <c-card class="mb-4">
+                    <c-card-header>Parcels Arriving Today</c-card-header>
+                    <c-card-body>
+                      <table
+                        [hover]="true"
+                        [responsive]="true"
+                        [striped]="true"
+                        align="middle"
+                        cTable
+                        class="mb-0 border">
+                        <thead cTableColor="light">
+                          <tr>
+                            <!-- <th class="text-center">
+                              <svg cIcon name="cilPeople"></svg>
+                            </th> -->
+                            <th>Pacakge</th>
+                            <th>Sender</th>
+                            <th>Reciever</th>
+                            <th>Status</th>
+                            <!-- <th>Activity</th> -->
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let todayArrival of clientDeliveries; index as i">
+                            <!-- <td class="text-center">
+                              <c-avatar
+                                size="md"
+                                src="{{ user.avatar }}"
+                                status="{{ user.status }}"
+                              ></c-avatar>
+                            </td> -->
+                            <td>
+                              <div>{{ todayArrival.tracking_code }}</div>
+                              <div class="small text-medium-emphasis text-nowrap">
+                                <span>
+                                  {{ todayArrival.state }} | Value: {{ todayArrival.package_value }}
+                                </span>
+                              </div>
+                            </td>
+                            <td>
+                              <div>{{ todayArrival.sender_first_name }} {{ todayArrival.sender_last_name }}</div>
+                              <div class="small text-medium-emphasis text-nowrap">
+                                <span>
+                                  {{ todayArrival.sender_phone }} | {{ todayArrival.from_branch_name }} {{ todayArrival.from_region }}
+                                </span>
+                              </div>
+                            </td>
+                            <td>
+                            <div>{{ todayArrival.reciever_first_name }} {{ todayArrival.reciever_last_name }}</div>
+                              <div class="small text-medium-emphasis text-nowrap">
+                                <span>
+                                    {{ todayArrival.reciever_phone }} | {{ todayArrival.to_branch_name }} {{ todayArrival.to_region }}
+                                </span>
+                              </div>
+                            </td>
+                           
+                            <td>
+                                <c-badge color="secondary">{{todayArrival.delivery_status}}</c-badge>
+                            </td>
+                            <!-- <td>
+                              <div class="small text-medium-emphasis">Last login</div>
+                              <div class="fw-semibold text-nowrap">{{ user.activity }}</div>
+                            </td> -->
+                          </tr>
+                        </tbody>
+                      </table>
+                    </c-card-body>
+                  </c-card>
+                </c-col>
+            </c-row>
+            </div>
+
+
             
         </c-card-body>
 
         <c-card-footer>
             <div *ngIf="showForm" class="d-flex flex-row-reverse">
-                <button cButton color="primary" (click)="createClient()">
+                <button cButton color="primary" (click)="saveClient()">
                   <c-spinner *ngIf="isLoading" size="sm"></c-spinner>
                   Save
                 </button>

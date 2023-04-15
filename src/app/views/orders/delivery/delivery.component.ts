@@ -2,9 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { cilArrowLeft } from '@coreui/icons';
 import { ApiService } from '../../../services/api.service';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import {MatDialogModule} from '@angular/material/dialog';
-
-
 
 declare var require: any;
 
@@ -29,8 +26,8 @@ export class DeliveryComponent implements OnInit {
 
   ) { }
 
-  showForm: boolean = false
-  showTable: boolean = true
+  showForm: boolean = true
+  showTable: boolean = false
   showAlert: boolean = false
   isLoading: boolean = false
   showDelivery: boolean = false
@@ -62,7 +59,8 @@ export class DeliveryComponent implements OnInit {
   formData: any;
   message: any;
   severity: any;
-  delivery: any
+  delivery: any;
+  notification_message: any;
 
   icons = { cilArrowLeft };
 
@@ -91,7 +89,12 @@ export class DeliveryComponent implements OnInit {
       arrival_date: new FormControl(""),
       description: new FormControl(""),
       payment_option: new FormControl(""),
-      amount_paid: new FormControl("")
+      amount_paid: new FormControl(""),
+      sms_notification: new FormControl(""),
+      email_notification: new FormControl(""),
+      whatsapp_notification: new FormControl(""),
+      no_notification: new FormControl(""),
+      notification_message: new FormControl("")
    });
   }
 
@@ -141,6 +144,7 @@ export class DeliveryComponent implements OnInit {
   createDelivery(){
 
     this.formData.created_by = localStorage.getItem("userId")
+    this.formData.notification_message = this.notification_message
 
     this.apiService.postData('deliveries', this.formData).then((response) => {
       if(response.success){
@@ -174,12 +178,7 @@ export class DeliveryComponent implements OnInit {
         this.toggleFormTable('table')
         this.deliveryForm.reset()
       }else{
-        this.message = response.message
-        this.showAlert = true
-        this.severity = "warning"
-        setTimeout(() => {
-          this.showAlert = false
-        }, 3000);
+        this.showNotification(response, "warning")
       }
       this.isLoading = false
     })
@@ -249,6 +248,21 @@ export class DeliveryComponent implements OnInit {
     setTimeout(() => {
       this.showAlert = false
     }, 3000);
+
+  }
+
+  sendNotification(){
+    // generate message
+    let sender_fname = this.deliveryForm.get('sender_first_name')?.value
+    let sender_lname = this.deliveryForm.get('sender_last_name')?.value
+    let reciever_fname = this.deliveryForm.get('reciever_first_name')?.value
+    let reciever_lname = this.deliveryForm.get('reciever_last_name')?.value
+    let arrival_date = this.deliveryForm.get('arrival_date')?.value
+
+    let message = `Parcel from ${sender_fname} ${sender_lname} to ${reciever_fname} ${reciever_lname} is on the way, it will arrive at ${arrival_date}`
+
+    this.notification_message = message
+    this.deliveryForm.get('notification_message').setValue(message)
 
   }
 
