@@ -108,6 +108,10 @@ export class DeliveryComponent implements OnInit {
 
   editDelivery(deliveryId: number){
     this.delivery = this.deliveries.find(element => element.id === deliveryId);
+    alert(this.delivery.sender_first_name)
+    this.deliveryForm.get("sender_first_name")?.setValue(this.delivery.sender_first_name)
+    // this.classFormGroup.get('name')?.setValue(classDetails.name)
+
     this.toggleFormTable('form')
   }
 
