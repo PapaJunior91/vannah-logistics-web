@@ -35,6 +35,7 @@
     "chart.js": "^3.9.1",
     "html-to-pdfmake": "^2.4.16",
     "jspdf": "^2.5.1",
+    "moment": "^2.29.4",
     "ngx-perfect-scrollbar": "^10.1.1",
     "pdfmake": "^0.2.7",
     "rxjs": "~7.8.0",

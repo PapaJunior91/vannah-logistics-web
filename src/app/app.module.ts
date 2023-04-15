@@ -46,7 +46,8 @@ import {
   TabsModule,
   UtilitiesModule,
   SpinnerModule,
-  AlertModule
+  AlertModule,
+  WidgetModule 
 } from '@coreui/angular';
 
 import { IconModule, IconSetService } from '@coreui/icons-angular';
@@ -55,6 +56,10 @@ import { UsersComponent } from './views/office/users/users.component';
 import { CouriersComponent } from './views/office/couriers/couriers.component';
 import { ClientsComponent } from './views/crm/clients/clients.component';
 import { DeliveryComponent } from './views/orders/delivery/delivery.component';
+import { LoginComponent } from './views/login/login.component';
+import { Page404Component } from './views/page404/page404.component';
+import { Page500Component } from './views/page500/page500.component';
+import { RegisterComponent } from './views/register/register.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -73,7 +78,12 @@ const APP_CONTAINERS = [
     UsersComponent, 
     CouriersComponent, 
     ClientsComponent,
-    DeliveryComponent
+    DeliveryComponent,
+    LoginComponent,
+    Page404Component,
+    Page500Component,
+    RegisterComponent
+
   ],
   imports: [
     BrowserModule,
@@ -106,7 +116,8 @@ const APP_CONTAINERS = [
     TableModule,
     HttpClientModule,
     SpinnerModule,
-    AlertModule
+    AlertModule,
+    WidgetModule  
   ],
   providers: [
     {

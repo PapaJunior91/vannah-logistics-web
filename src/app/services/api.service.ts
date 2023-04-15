@@ -15,7 +15,7 @@ export class ApiService {
     private httpClient: HttpClient
   ) { }
 
-  async login(url: any, data: any){
+  login(url: any, data: any){
     return new Promise<any>((resolve, reject) => {
       this.httpClient.post(this.baseUrl + url, data, {
       }).subscribe((value) => {

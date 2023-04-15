@@ -46,9 +46,6 @@ export class DeliveryComponent implements OnInit {
     this.getCouriers()
     this.getDeliveries()
     this.initiateForm()
-    // setTimeout(() => {
-    //   this.getDelivery(1)
-    // }, 2000);
   }
 
   initiateForm(){
