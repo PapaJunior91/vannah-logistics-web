@@ -53,7 +53,7 @@
                     <th scope="col">Sender</th>
                     <th scope="col">Reciever</th>
                     <th scope="col">Arrival</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Progress</th>
                     <th scope="col"></th>
                     </tr>
                   </thead>
@@ -66,12 +66,14 @@
                       <td>{{delivery.sender_first_name}} {{delivery.sender_last_name}}</td>
                       <td>{{delivery.reciever_first_name}} {{delivery.reciever_last_name}}</td>
                       <td>{{delivery.arrival_date}}</td>
-                      <td><c-badge color="secondary">{{delivery.delivery_status}}</c-badge></td>
+                      <td><c-badge [color]="delivery.delivery_status == 'arrived'? 'success' : 'secondary'">{{delivery.delivery_status}}</c-badge></td>
                       <td>
                         <c-button-group aria-label="Basic example" role="group">
                             <button cButton color="primary" (click)="getDelivery(delivery.id)">Details</button>
                             <button cButton color="primary" (click)="editDelivery(delivery.id)">Update</button>
-                            <button cButton color="primary">Archive</button>
+                            <button cButton [color]="delivery.status == 'active'? 'primary' : 'warning'" (click)="archiveDelivery(delivery.id)">
+                              {{delivery.status == 'active' ? 'Archive' : 'Archived'}}
+                            </button>
                         </c-button-group>
                       </td>
                     </tr>

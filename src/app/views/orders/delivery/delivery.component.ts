@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { cilArrowLeft } from '@coreui/icons';
 import { ApiService } from '../../../services/api.service';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import {MatDialogModule} from '@angular/material/dialog';
+
 
 
 declare var require: any;
@@ -111,6 +113,16 @@ export class DeliveryComponent implements OnInit {
     })
   }
 
+  archiveDelivery(deliveryId: number){
+    this.apiService.updateData(`archive-deliveries/${deliveryId}`, {}).then((response) => {
+      if(response.success){
+        this.showNotification(response, "success")
+      }else{
+        this.showNotification(response, "warning")
+      }
+    })
+  }
+
   saveDelivery(){
     this.isLoading = true
     this.formData = this.deliveryForm.value
@@ -127,7 +139,7 @@ export class DeliveryComponent implements OnInit {
   }
 
   createDelivery(){
-    
+
     this.formData.created_by = localStorage.getItem("userId")
 
     this.apiService.postData('deliveries', this.formData).then((response) => {
