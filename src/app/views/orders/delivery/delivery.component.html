@@ -45,38 +45,36 @@
               </div>
               <table cTable>
                   <thead>
-                  <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Track</th>
-                  <th scope="col">From</th>
-                  <th scope="col">To</th>
-                  <th scope="col">Sender</th>
-                  <th scope="col">Reciever</th>
-                  <th scope="col">Arrival</th>
-                  <th scope="col">Status</th>
-                  <th scope="col"></th>
-                  </tr>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Track</th>
+                    <th scope="col">From</th>
+                    <th scope="col">To</th>
+                    <th scope="col">Sender</th>
+                    <th scope="col">Reciever</th>
+                    <th scope="col">Arrival</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                    </tr>
                   </thead>
                   <tbody>
-                  <tr *ngFor="let delivery of deliveries, let i = index">
-                    <th scope="row">{{i+1}}</th>
-                    <td>{{delivery.tracking_code}}</td>
-                    <td>{{delivery.from_region}} {{delivery.from_branch_name}}</td>
-                    <td>{{delivery.to_region}} {{delivery.to_branch_name}}</td>
-                    <td>{{delivery.sender_first_name}} {{delivery.sender_last_name}}</td>
-                    <td>{{delivery.reciever_first_name}} {{delivery.reciever_last_name}}</td>
-                    <td>{{delivery.arrival_date}}</td>
-                    <td>
-                        <c-badge color="secondary">{{delivery.delivery_status}}</c-badge>
-                    </td>
-                    <td>
+                    <tr *ngFor="let delivery of deliveries, let i = index">
+                      <th scope="row">{{i+1}}</th>
+                      <td>{{delivery.tracking_code}}</td>
+                      <td>{{delivery.from_region}} {{delivery.from_branch_name}}</td>
+                      <td>{{delivery.to_region}} {{delivery.to_branch_name}}</td>
+                      <td>{{delivery.sender_first_name}} {{delivery.sender_last_name}}</td>
+                      <td>{{delivery.reciever_first_name}} {{delivery.reciever_last_name}}</td>
+                      <td>{{delivery.arrival_date}}</td>
+                      <td><c-badge color="secondary">{{delivery.delivery_status}}</c-badge></td>
+                      <td>
                         <c-button-group aria-label="Basic example" role="group">
                             <button cButton color="primary" (click)="getDelivery(delivery.id)">Details</button>
-                            <button cButton color="primary">Update</button>
+                            <button cButton color="primary" (click)="editDelivery(delivery.id)">Update</button>
                             <button cButton color="primary">Del</button>
                         </c-button-group>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
                   </tbody>
               </table>
             </div>
@@ -109,6 +107,7 @@
                             type="text"
                             formControlName="sender_first_name"
                             name="sender_first_name"
+                            [value]="delivery.sender_first_name"
                            />
                         </div>
                         <div class="w-100 ms-1">

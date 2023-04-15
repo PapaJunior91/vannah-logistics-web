@@ -106,10 +106,14 @@ export class DeliveryComponent implements OnInit {
     })
   }
 
-  getDelivery(deliveryId: any){
+  editDelivery(deliveryId: number){
+    this.delivery = this.deliveries.find(element => element.id === deliveryId);
+    this.toggleFormTable('form')
+  }
+
+  getDelivery(deliveryId: number){
     this.delivery = this.deliveries.find(element => element.id === deliveryId);
     this.toggleFormTable('print')
-    console.log(this.delivery)
   }
 
   printDelivery() {
