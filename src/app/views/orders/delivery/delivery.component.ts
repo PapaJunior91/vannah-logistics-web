@@ -10,6 +10,9 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts";
 const htmlToPdfmake = require("html-to-pdfmake");
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+
 
 @Component({
   selector: 'app-delivery',
@@ -19,18 +22,25 @@ const htmlToPdfmake = require("html-to-pdfmake");
 export class DeliveryComponent implements OnInit {
 
   @ViewChild('pdfPage') pdfPage!: ElementRef;
-
+  
+  
   constructor(
     private apiService: ApiService,
     private formBuilder: FormBuilder,
-
-  ) { }
-
-  showForm: boolean = true
-  showTable: boolean = false
+    ) { }
+    
+  showForm: boolean = false
+  showTable: boolean = true
   showAlert: boolean = false
   isLoading: boolean = false
   showDelivery: boolean = false
+  deliveryQrCodeString: string = "";
+
+  companyLogo = localStorage.getItem("companyLogo")
+  companyName = localStorage.getItem("companyName")
+  companyEmail = localStorage.getItem("companyEmail")
+  companyPhone = localStorage.getItem("companyPhone")
+  companyAddress = localStorage.getItem("companyAddress")
 
   deliveries: Array<any> = <any>[]
   branches: Array<any> = <any>[]
@@ -91,8 +101,8 @@ export class DeliveryComponent implements OnInit {
       payment_option: new FormControl(""),
       amount_paid: new FormControl(""),
       sms_notification: new FormControl(""),
-      email_notification: new FormControl(""),
-      whatsapp_notification: new FormControl(""),
+      email_notification: new FormControl({value: '', disabled: true}),
+      whatsapp_notification: new FormControl({value: '', disabled: true}),
       no_notification: new FormControl(""),
       notification_message: new FormControl("")
    });
@@ -120,6 +130,7 @@ export class DeliveryComponent implements OnInit {
     this.apiService.updateData(`archive-deliveries/${deliveryId}`, {}).then((response) => {
       if(response.success){
         this.showNotification(response, "success")
+        this.getDeliveries()
       }else{
         this.showNotification(response, "warning")
       }
@@ -207,15 +218,31 @@ export class DeliveryComponent implements OnInit {
   }
 
   getDelivery(deliveryId: number){
-    this.delivery = this.deliveries.find(element => element.id === deliveryId);
+    console.log(this.delivery = this.deliveries.find(element => element.id == deliveryId));
+    this.deliveryQrCodeString = this.delivery.tracking_code
     this.toggleFormTable('print')
   }
 
   printDelivery() {
+
+    let _node:any = document.getElementById('pdfPage');
+
+    htmlToImage.toPng(_node)
+  .then(function (dataUrl) {
+    var img = new Image();
+    img.src = dataUrl;
+    document.body.appendChild(img);
+  })
+  .catch(function (error) {
+    console.error('oops, something went wrong!', error);
+  });
+
+  return
     const pdfPage = this.pdfPage.nativeElement;
     var html = htmlToPdfmake(pdfPage.innerHTML);
     const documentDefinition = { content: html };
     pdfMake.createPdf(documentDefinition).download(); 
+
   }
 
   toggleFormTable(el: any){

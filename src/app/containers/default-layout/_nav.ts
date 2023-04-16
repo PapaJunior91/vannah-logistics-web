@@ -7,40 +7,40 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-speedometer' },
     badge: {
       color: 'info',
-      text: 'NEW'
+      text: '0'
     }
   },
-  {
-    name: 'Orders',
-    title: true
-  },
+  // {
+  //   name: 'Orders',
+  //   title: true
+  // },
   {
     name: 'Deliveries',
     url: '/order/deliveries',
-    // iconComponent: { name: 'cil-truck' }
+    iconComponent: { name: 'cil-truck' }
   },
-  {
-    name: 'CRM',
-    title: true
-  },
+  // {
+  //   name: 'CRM',
+  //   title: true
+  // },
   {
     name: 'Clients',
     url: '/crm/clients',
     iconComponent: { name: 'cil-user-female' }
   },
-  {
-    name: 'OFFICE',
-    title: true
-  },
+  // {
+  //   name: 'OFFICE',
+  //   title: true
+  // },
   {
     name: 'Couriers',
     url: '/office/couriers',
-    // iconComponent: { name: 'cil-bus-alt' }
+    iconComponent: { name: 'cil-bus-alt' }
   },
   {
     name: 'Branches',
     url: '/office/branches',
-    // iconComponent: { name: 'cil-door' }
+    iconComponent: { name: 'cil-building' }
   },
   {
     name: 'Users',

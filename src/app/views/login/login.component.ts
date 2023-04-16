@@ -39,6 +39,11 @@ export class LoginComponent {
     this.apiService.login('login', this.loginForm.value).then((response: any) => {
       if(response.success){
         localStorage.setItem('userId', response.data.id)
+        localStorage.setItem('companyName', response.data.company_info.company_name)
+        localStorage.setItem('companyLogo', response.data.company_info.company_logo)
+        localStorage.setItem('companyAddress', response.data.company_info.company_address)
+        localStorage.setItem('companyPhone', response.data.company_info.company_phone)
+        localStorage.setItem('companyEmail', response.data.company_info.company_email)
         this.router.navigate(['/dashboard']);
       }else{
         this.message = response.message

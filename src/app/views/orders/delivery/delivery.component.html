@@ -95,21 +95,21 @@
                 <form [formGroup]="deliveryForm" cForm class="my-2">
                     <div class="d-flex">
                         <div class="mb-3 w-100 me-1">
-                          <label cLabel for="exampleFormControlInput1">From</label>
+                          <strong>From</strong>
                           <select aria-label="Default select example" cSelect formControlName="from_branch_id" name="from_branch_id">
                             <option>Select Origin</option>
                             <option *ngFor="let branch of branches" [ngValue]="branch">{{branch.region}} {{branch.branch_name}}</option>
                           </select>
                         </div>
                         <div class="mb-3 w-100 ms-1">
-                          <label cLabel for="exampleFormControlInput1">To</label>
+                          <strong>To</strong>
                           <select aria-label="Default select example" cSelect formControlName="to_branch_id" name="to_branch_id">
                             <option>Select Destination</option>
                             <option *ngFor="let branch of branches" [ngValue]="branch">{{branch.region}} {{branch.branch_name}} </option>
                           </select>
                         </div>
                     </div>
-                    <span>Sender Details</span>
+                    <strong>Sender Details</strong>
                     <div class="d-flex my-2">
                         <div class="w-100 me-1">
                           <!-- <label cLabel for="exampleFormControlInput1">First Name</label> -->
@@ -155,7 +155,7 @@
                         </div>
                     </div>
 
-                    <span>Reciever Details</span>
+                    <strong>Reciever Details</strong>
                     <div class="d-flex my-2">
                         <div class="w-100 me-1">
                           <!-- <label cLabel for="exampleFormControlInput1">First Name</label> -->
@@ -201,7 +201,7 @@
                         </div>
                     </div>
 
-                    <span>Delivery Details</span>
+                    <strong>Delivery Details</strong>
                     <div class="d-flex my-2">
                         <div class="w-100 me-1">
                           <!-- <label cLabel for="exampleFormControlInput1"></label> -->
@@ -246,13 +246,13 @@
 
                     <div class="d-flex">
                         <div class="mb-3 w-100 me-1">
-                          <label cLabel for="exampleFormControlInput1">Description</label>
+                          <strong>Description</strong>
                           <textarea cFormControl id="exampleFormControlTextarea1" rows="3"
                           formControlName="description" name="description"></textarea>
                         </div>
                     </div>
 
-                    <span>Payment Details</span>
+                    <strong>Payment Details</strong>
                     <div class="d-flex">
                         <div class="mb-3 w-100 me-1">
                           <!-- <label cLabel for="exampleFormControlInput1">Amount</label> -->
@@ -273,19 +273,19 @@
                         </div>
                     </div>
 
-                    <span>Send Notification</span>
+                    <strong>Send Notification</strong>
                     <div class="d-flex justify-content-between">
                       <div class="my-2 w-25">
                           <c-form-check>
-                            <input [checked]="true" (change)="sendNotification()" cFormCheckInput id="sms_notification" type="checkbox" formControlName="sms_notification" />
+                            <input (change)="sendNotification()" cFormCheckInput id="sms_notification" type="checkbox" formControlName="sms_notification" />
                             <label cFormCheckLabel for="checkOne">SMS</label>
                           </c-form-check>
                           <c-form-check>
-                            <input cFormCheckInput [disabled]="true" id="checkTwo" type="checkbox" formControlName="whatsapp_notification" />
+                            <input cFormCheckInput id="checkTwo" type="checkbox" formControlName="whatsapp_notification" />
                             <label cFormCheckLabel for="checkTwo">WHATSAPP</label>
                           </c-form-check>
                           <c-form-check>
-                            <input cFormCheckInput [disabled]="true" id="checkTHREE" type="checkbox" formControlName="email_notification" />
+                            <input cFormCheckInput id="checkTHREE" type="checkbox" formControlName="email_notification" />
                             <label cFormCheckLabel for="checkTwo">EMAIL</label>
                           </c-form-check>
                           <c-form-check>
@@ -305,125 +305,87 @@
             </div>
 
             <div *ngIf="showDelivery" id="pdfPage" #pdfPage="">
-                <div class="my-2">
-                    <div class="d-flex">
-                      <div class="w-100 d-flex">
-                        <!-- <img alt="logo" src="../../../../assets/img/brand/logistics_black.png" width="80" height="80" /> -->
-                        <div class="mx-1">
-                          <h3>Smart Deliveries</h3>
-                          <i>Safe & Fast</i>
+              <div class="d-flex my-2 w-75 border justify-content-center">
+                      <div class="d-flex p-2 bg-light flex-column">
+                        <div class="w-100 d-flex flex-column">
+                          <img alt="logo" [src]="companyLogo" width="80" height="80" />
+                          <strong>{{companyName}}</strong>
+                          <span>Safe & Fast</span>
+                          <span>Dar Es Salaam, {{companyAddress}}</span>
+                          <span>{{companyPhone}}</span>
+                          <span>{{companyEmail}}</span>
+                        </div>
+                        <div class="w-100 d-flex flex-column my-2">
+                          <qrcode [qrdata]="deliveryQrCodeString" [width]="150" [errorCorrectionLevel]="'M'"></qrcode>
+                          <h2 style="text-transform: uppercase;">{{delivery.tracking_code}}</h2>
                         </div>
                       </div>
-                      <div class="w-100">
-                        Dar Es Salaam, Mbezi<br>
-                        07888 900 092/0678 122 303<br>
-                        info@smart.com<br>
-                      </div>
-                    </div>
-                    <hr/>
-                    <div class="d-flex">
-                        <div class="mb-3 w-100 me-1">
-                          <h4>Track Code {{delivery.tracking_code}}</h4>
-                        </div>
-                        <div class="mb-3 w-100 ms-1">
-                          <!-- <label cLabel for="exampleFormControlInput1">To</label>
-                          Mwanza, Sokoni -->
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="mb-3 w-100 me-1">
-                          <label cLabel for="exampleFormControlInput1">From</label>
+
+                    <table cTable class="table">
+                    <tbody>
+                      <tr>
+                        <th>From</th>
+                        <td>
                           {{delivery.from_region}}
                           {{delivery.from_branch_name}}
-                        </div>
-                        <div class="mb-3 w-100 ms-1">
-                          <label cLabel for="exampleFormControlInput1">To</label>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>To</th>
+                        <td>
                           {{delivery.to_region}}
                           {{delivery.to_branch_name}}
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                      <div class="w-100 me-1">
-                        <span>Sender Details</span>
-                        <hr/>
-                        <div class="d-flex my-2">
-                            <div class="w-100 me-1">
-                              {{delivery.sender_first_name}}
-                              {{delivery.sender_last_name}}
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="mb-3 w-100 me-1">
-                              {{delivery.sender_email}}
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="mb-3 w-100 me-1">
-                              {{delivery.sender_phone}}
-                            </div>
-                        </div>
-                      </div>
-                      <div class="w-100">
-                        <span>Reciever Details</span>
-                        <hr/>
-                        <div class="d-flex my-2">
-                            <div class="w-100 me-1">
-                              {{delivery.reciever_first_name}}
-                              {{delivery.reciever_last_name}}
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="mb-3 w-100 me-1">
-                              {{delivery.reciever_email}}
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="mb-3 w-100 me-1">
-                              {{delivery.reciever_phone}}
-                            </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <span>Delivery Details</span>
-                    <hr/>
-                    <div class="d-flex my-2">
-                        <div class="w-100 me-1">
-                          Package Value TZS {{delivery.package_value}}
-                        </div>
-                        <div class="w-100 ms-1">
-                           Arrival Date {{delivery.arrival_date}}
-                        </div>
-                    </div>
-                    <div class="d-flex my-2">
-                        <div class="w-100 me-1">
-                           Courier {{delivery.courier_name}}
-                        </div>
-                        <div class="w-100 ms-1">
-                          Delivery Status {{delivery.delivery_status}}
-                        </div>
-                    </div>
-
-                    <div class="d-flex">
-                        <div class="mb-3 w-100 me-1">
-                          <label cLabel for="exampleFormControlInput1">Description</label>
-                          <hr/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Sender</th>
+                        <td>
+                          {{delivery.sender_first_name}}
+                          {{delivery.sender_last_name}}
+                          {{delivery.sender_phone}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Reciever</th>
+                        <td>
+                          {{delivery.reciever_first_name}}
+                          {{delivery.reciever_last_name}}
+                          {{delivery.reciever_phone}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Package Value</th>
+                        <td>
+                          {{delivery.package_value}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Arrival Date</th>
+                        <td>
+                          {{delivery.arrival_date}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Courier</th>
+                        <td>
+                          {{delivery.courier_name}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Payment Option</th>
+                        <td>
+                          {{delivery.payment_option}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Description</th>
+                        <td>
                           {{delivery.description}}
-
-                        </div>
-                    </div>
-
-                    <span>Payment Details</span>
-                    <hr>
-                    <div class="d-flex">
-                      <div class="mb-3 w-100 me-1">
-                        Payment Options {{delivery.payment_option}}
-                      </div>
-                      <div class="mb-3 w-100 me-1">
-                        Amount Paid TZS {{delivery.amount_paid}}
-                      </div>
-                    </div>
-                </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
             </div>
             
         </c-card-body>
@@ -439,7 +401,7 @@
                 </button>
             </div>
             <div *ngIf="showTable" class="d-flex flex-row-reverse">
-                <span>All Deliveries</span>
+                <strong>All Deliveries</strong>
             </div>
             <!-- <button cButton color="primary">Clear</button> -->
         </c-card-footer>

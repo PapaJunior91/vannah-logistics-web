@@ -133,7 +133,9 @@
                 </td>
                
                 <td>
-                    <c-badge color="secondary">{{todayArrival.delivery_status}}</c-badge>
+                    <c-badge *ngIf="todayArrival.delivery_status == 'delayed'"  color = "danger">{{todayArrival.delivery_status}}</c-badge>
+                    <c-badge *ngIf="todayArrival.delivery_status == 'arrived'"  color = "success">{{todayArrival.delivery_status}}</c-badge>
+                    <c-badge *ngIf="todayArrival.delivery_status == 'on transit'" color = "secondary">{{todayArrival.delivery_status}}</c-badge>
                 </td>
                 <!-- <td>
                   <div class="small text-medium-emphasis">Last login</div>

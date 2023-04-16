@@ -5,6 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { QRCodeModule } from 'angularx-qrcode';
+
 
 import {
   PERFECT_SCROLLBAR_CONFIG,
@@ -47,7 +49,8 @@ import {
   UtilitiesModule,
   SpinnerModule,
   AlertModule,
-  WidgetModule 
+  WidgetModule,
+  
 } from '@coreui/angular';
 
 // import { MatDialogModule } from '@angular/material;
@@ -122,6 +125,7 @@ const APP_CONTAINERS = [
     AlertModule,
     WidgetModule,
     /////////////
+    QRCodeModule
     
   ],
   providers: [
