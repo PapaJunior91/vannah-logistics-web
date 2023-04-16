@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import axio from 'axios';
 import {HttpClient} from "@angular/common/http";
-
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +7,7 @@ import {HttpClient} from "@angular/common/http";
 export class ApiService {
 
   _baseUrl = 'http://127.0.0.1:8000/api/'
-  baseUrl = 'https://tms.server.nexent.dev/api/'
+  baseUrl = 'https://tms-api.server.nexent.dev/api/'
 
   constructor(
     private httpClient: HttpClient
