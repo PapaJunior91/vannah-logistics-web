@@ -28,10 +28,11 @@
                 </div>
                 <div class="w-100 d-flex align-items-center">
                   <div class="w-100 me-1">
-                    <select aria-label="Default select example" cSelect>
+                    <select id="delivery_status" aria-label="Default select example" cSelect (change)="filterDelivery($event.target)">
                       <option>Select Status</option>
                       <option value="on transit">On Transit</option>
                       <option value="arrived">Arrived</option>
+                      <option value="delayed">Delayed</option>
                     </select>
                   </div>
                   <div class="w-100 me-1">
@@ -39,6 +40,7 @@
                       id="exampleFormControlInput1"
                       placeholder="Search..."
                       type="text"
+                      (keyup)="searchDelivery($event.target)"
                       />
                   </div>
                 </div>
@@ -201,7 +203,7 @@
                         </div>
                     </div>
 
-                    <strong>Delivery Details</strong>
+                    <strong>Parcel Details</strong>
                     <div class="d-flex my-2">
                         <div class="w-100 me-1">
                           <!-- <label cLabel for="exampleFormControlInput1"></label> -->

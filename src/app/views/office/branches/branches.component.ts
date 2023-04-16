@@ -21,6 +21,7 @@ export class BranchesComponent {
 
   users: Array<any> = <any>[]
   branches: Array<any> = <any>[]
+  _branches: Array<any> = <any>[]
   regions: Array<any> = <any>[]
 
   branchForm: any;
@@ -46,9 +47,10 @@ export class BranchesComponent {
    });
   }
 
-  async getBranches(){
-    this.branches = await this.apiService.getData('branches').then((response) => {
-      return response.data;
+  getBranches(){
+    this.apiService.getData('branches').then((response) => {
+      this.branches = response.data;
+      this._branches = response.data;
     })
   }
 
@@ -82,6 +84,13 @@ export class BranchesComponent {
     })
   }
 
+  searchBranch(e: any){
+    let searchKey = e.value
+    this.branches = this._branches.filter((branch:any) => {
+      return  branch.branch_name.includes(searchKey);
+    })
+  }
+
   toggleFormTable(el: any){
     switch(el){
       case 'table': 
@@ -94,4 +103,5 @@ export class BranchesComponent {
         break;
     }
   }
+
 }

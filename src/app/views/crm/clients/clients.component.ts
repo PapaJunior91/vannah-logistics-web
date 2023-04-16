@@ -20,6 +20,7 @@ export class ClientsComponent {
   showDeliveries:boolean = false
 
   clients: Array<any> = <any>[]
+  _clients: Array<any> = <any>[]
   regions: Array<any> = <any>[]
   clientDeliveries: Array<any> = <any>[]
   formFields: Array<any> = <any>[
@@ -59,9 +60,10 @@ export class ClientsComponent {
    });
   }
 
-  async getClients(){
-    this.clients = await this.apiService.getData('clients').then((response) => {
-      return response.data;
+  getClients(){
+    this.apiService.getData('clients').then((response) => {
+      this.clients = response.data;
+      this._clients = response.data;
     })
   }
 
@@ -137,14 +139,6 @@ export class ClientsComponent {
       this.clientForm.get(field)?.setValue(this.client[field])
     })
 
-    // let toSelect = this.couriers.find(c => c.id == this.delivery.courier_id)
-    // let _toSelect = this.branches.find(b => b.branch_id == this.delivery.from_branch_id)
-    // let __toSelect = this.branches.find(b => b.branch_id == this.delivery.to_branch_id)
-
-    // this.deliveryForm.get('courier_id')?.setValue(toSelect);
-    // this.deliveryForm.get('from_branch_id')?.setValue(_toSelect);
-    // this.deliveryForm.get('to_branch_id')?.setValue(__toSelect);
-
     this.toggleFormTable('form')
   }
 
@@ -184,6 +178,15 @@ export class ClientsComponent {
       this.updateClient()
 
   }
+
+  searchClient(e: any){
+    let searchKey = e.value
+    this.clients = this._clients.filter((client:any) => {
+      return  client.first_name.includes(searchKey) ||
+              client.last_name.includes(searchKey);
+    })
+  }
+  
 
   showNotification(response:any, color:any){
     this.message = response.message

@@ -19,6 +19,7 @@ export class CouriersComponent {
   isLoading:boolean = false
 
   couriers: Array<any> = <any>[]
+  _couriers: Array<any> = <any>[]
   branches: Array<any> = <any>[]
 
   courierForm: any;
@@ -41,9 +42,10 @@ export class CouriersComponent {
    });
   }
 
-  async getCouriers(){
-    this.couriers = await this.apiService.getData('couriers').then((response) => {
-      return response.data;
+  getCouriers(){
+     this.apiService.getData('couriers').then((response) => {
+      this.couriers = response.data;
+      this._couriers = response.data;
     })
   }
 
@@ -62,6 +64,13 @@ export class CouriersComponent {
         }, 3000);
       }
       this.isLoading = false
+    })
+  }
+
+  searchCourier(e: any){
+    let searchKey = e.value
+    this.couriers = this._couriers.filter((branch:any) => {
+      return  branch.courier_name.includes(searchKey);
     })
   }
 

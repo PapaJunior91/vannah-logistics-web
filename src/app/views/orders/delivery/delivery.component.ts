@@ -43,6 +43,7 @@ export class DeliveryComponent implements OnInit {
   companyAddress = localStorage.getItem("companyAddress")
 
   deliveries: Array<any> = <any>[]
+  _deliveries: Array<any> = <any>[]
   branches: Array<any> = <any>[]
   couriers: Array<any> = <any>[]
   formFields: Array<any> = <any>[
@@ -114,9 +115,10 @@ export class DeliveryComponent implements OnInit {
     })
   }
 
-  async getDeliveries(){
-    this.deliveries = await this.apiService.getData('deliveries').then((response) => {
-      return response.data;
+  getDeliveries(){
+    this.apiService.getData('deliveries').then((response) => {
+      this.deliveries = response.data;
+      this._deliveries = response.data;
     })
   }
 
@@ -215,6 +217,23 @@ export class DeliveryComponent implements OnInit {
     this.deliveryForm.get('to_branch_id')?.setValue(__toSelect);
 
     this.toggleFormTable('form')
+  }
+
+  filterDelivery(e: any){
+    let _status = e.value
+    this.deliveries = this._deliveries.filter((delivery:any) => {
+      return _status === delivery.delivery_status;
+    })
+
+  }
+
+  searchDelivery(e: any){
+    let searchKey = e.value
+    this.deliveries = this._deliveries.filter((delivery:any) => {
+      return  delivery.tracking_code.includes(searchKey) || 
+              delivery.sender_first_name.includes(searchKey) ||
+              delivery.reciever_first_name.includes(searchKey);
+    })
   }
 
   getDelivery(deliveryId: number){
