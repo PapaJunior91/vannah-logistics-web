@@ -1,7 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+
 
 import { ClassToggleService, HeaderComponent } from '@coreui/angular';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-default-header',
@@ -15,7 +18,17 @@ export class DefaultHeaderComponent extends HeaderComponent {
   public newTasks = new Array(5)
   public newNotifications = new Array(5)
 
-  constructor(private classToggler: ClassToggleService) {
+  constructor(
+    private classToggler: ClassToggleService,
+    private apiService: ApiService,
+    private router:Router,
+
+    ) {
     super();
+  }
+
+  logout(){
+    // this.apiService.logout()
+    this.router.navigate(['/login']);
   }
 }

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import { environment } from "../../environments/environment"
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-
-  _baseUrl = 'http://127.0.0.1:8000/api/'
-  baseUrl = 'https://tms-api.server.nexent.dev/api/'
+  
+  baseUrl = environment.baseUrl
 
   constructor(
     private httpClient: HttpClient
