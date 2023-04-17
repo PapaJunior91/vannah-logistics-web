@@ -4,33 +4,81 @@
       <c-col lg="7" md="9" xl="6">
         <c-card class="mx-4">
           <c-card-body class="p-4">
-            <form cForm>
+               
+            <c-alert *ngIf="showAlert" [color]="severity">
+              {{message}}
+            </c-alert>
+
+            <form cForm [formGroup]="registerForm">
               <h1>Register</h1>
               <p class="text-medium-emphasis">Create your account</p>
-              <c-input-group class="mb-3">
+
+              <div class="d-flex">
+                <c-input-group class="mx-1">
+                  <span cInputGroupText>
+                    <svg cIcon name="cilUser"></svg>
+                  </span>
+                  <input formControlName="company_name" autoComplete="name" cFormControl placeholder="Company Name" />
+                </c-input-group>
+  
+                <c-input-group class="mx-1">
+                  <!-- <span cInputGroupText>
+                    <svg cIcon name="cilUser"></svg>
+                  </span> -->
+                  <input formControlName="address" autoComplete="name" cFormControl placeholder="Address" />
+                </c-input-group>
+              </div>
+
+
+              <div class="d-flex my-2">
+                <c-input-group class="mx-1">
+                  <span cInputGroupText>
+                    <svg cIcon name="cilUser"></svg>
+                  </span>
+                  <input formControlName="first_name" autoComplete="name" cFormControl placeholder="FirstName" />
+                </c-input-group>
+                <c-input-group class="mx-1">
+                  <span cInputGroupText>
+                    <svg cIcon name="cilUser"></svg>
+                  </span>
+                  <input formControlName="last_name" autoComplete="name" cFormControl placeholder="LastName" />
+                </c-input-group>
+              </div>
+              
+              <c-input-group class="my-1">
+                <!-- <span cInputGroupText>@</span> -->
+                <span cInputGroupText>
+                    <svg cIcon name="cilPhone"></svg>
+                  </span>
+                <input formControlName="phone" autoComplete="email" cFormControl placeholder="PhoneNumber" />
+              </c-input-group>
+              <c-input-group class="my-1">
+                <span cInputGroupText>@</span>
+                <input formControlName="email" autoComplete="email" cFormControl placeholder="Email" />
+              </c-input-group>
+              <c-input-group class="my-1">
                 <span cInputGroupText>
                   <svg cIcon name="cilUser"></svg>
                 </span>
-                <input autoComplete="name" cFormControl placeholder="Username" />
+                <input formControlName="username" autoComplete="name" cFormControl placeholder="Username" />
               </c-input-group>
-              <c-input-group class="mb-3">
-                <span cInputGroupText>@</span>
-                <input autoComplete="email" cFormControl placeholder="Email" />
-              </c-input-group>
-              <c-input-group class="mb-3">
+              <c-input-group class="my-1">
                 <span cInputGroupText>
                   <svg cIcon name="cilLockLocked"></svg>
                 </span>
-                <input autoComplete="new-password" cFormControl placeholder="Password" type="password" />
+                <input formControlName="password" autoComplete="new-password" cFormControl placeholder="Password" type="password" />
               </c-input-group>
-              <c-input-group class="mb-4">
+              <c-input-group class="my-1">
                 <span cInputGroupText>
                   <svg cIcon name="cilLockLocked"></svg>
                 </span>
-                <input autoComplete="new-password" cFormControl placeholder="Repeat password" type="password" />
+                <input formControlName="confirm_password" autoComplete="new-password" cFormControl placeholder="Repeat password" type="password" />
               </c-input-group>
               <div class="d-grid">
-                <button cButton color="success">Create Account</button>
+                <button (click)="register()" cButton color="primary">
+                  <c-spinner *ngIf="isLoading" size="sm"></c-spinner>
+                  Create Account
+                </button>
               </div>
             </form>
           </c-card-body>
