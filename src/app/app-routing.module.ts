@@ -29,7 +29,7 @@ const routes: Routes = [
       {
         path: 'order/deliveries',
         component: DeliveryComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
         data: {
           title: 'Deliveries'
         },
@@ -46,7 +46,7 @@ const routes: Routes = [
       {
         path: 'crm/clients',
         component: ClientsComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
         data: {
           title: 'Clients'
         },
@@ -68,7 +68,7 @@ const routes: Routes = [
       {
         path: 'office/couriers',
         component: CouriersComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
         data: {
           title: 'Courier'
         },
@@ -76,7 +76,7 @@ const routes: Routes = [
       {
         path: 'office/branches',
         component: BranchesComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
         data: {
           title: 'Branch'
         },
@@ -84,7 +84,7 @@ const routes: Routes = [
       {
         path: 'office/users',
         component: UsersComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
         data: {
           title: 'Users'
         },
