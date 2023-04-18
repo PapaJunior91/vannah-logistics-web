@@ -11,6 +11,7 @@ import { CouriersComponent } from './views/office/couriers/couriers.component';
 import { DeliveryComponent } from './views/orders/delivery/delivery.component';
 import { ClientsComponent } from './views/crm/clients/clients.component';
 import { RegisterComponent } from './views/register/register.component';
+import { AuthGuard } from './services/auth.guard';
 
 const routes: Routes = [
   {
@@ -28,6 +29,7 @@ const routes: Routes = [
       {
         path: 'order/deliveries',
         component: DeliveryComponent,
+        canActivate: [AuthGuard],
         data: {
           title: 'Deliveries'
         },
@@ -44,6 +46,7 @@ const routes: Routes = [
       {
         path: 'crm/clients',
         component: ClientsComponent,
+        canActivate: [AuthGuard],
         data: {
           title: 'Clients'
         },
@@ -65,6 +68,7 @@ const routes: Routes = [
       {
         path: 'office/couriers',
         component: CouriersComponent,
+        canActivate: [AuthGuard],
         data: {
           title: 'Courier'
         },
@@ -72,6 +76,7 @@ const routes: Routes = [
       {
         path: 'office/branches',
         component: BranchesComponent,
+        canActivate: [AuthGuard],
         data: {
           title: 'Branch'
         },
@@ -79,6 +84,7 @@ const routes: Routes = [
       {
         path: 'office/users',
         component: UsersComponent,
+        canActivate: [AuthGuard],
         data: {
           title: 'Users'
         },

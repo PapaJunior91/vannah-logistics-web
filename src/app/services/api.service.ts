@@ -9,9 +9,18 @@ export class ApiService {
   
   baseUrl = environment.baseUrl
 
+  isLoggedin = localStorage.getItem("isLoggedin")
+
   constructor(
     private httpClient: HttpClient
   ) { }
+
+  getAuthStatus(){
+    if(this.isLoggedin)
+      return true
+    
+    return false
+  }
 
   login(url: any, data: any){
     return new Promise<any>((resolve, reject) => {

@@ -44,6 +44,7 @@ export class LoginComponent {
         localStorage.setItem('companyAddress', response.data.company_info.company_address)
         localStorage.setItem('companyPhone', response.data.company_info.company_phone)
         localStorage.setItem('companyEmail', response.data.company_info.company_email)
+        localStorage.setItem('isLoggedin', JSON.stringify(true))
         this.router.navigate(['/dashboard']);
       }else{
         this.message = response.message

@@ -28,7 +28,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
   }
 
   logout(){
-    // this.apiService.logout()
+    localStorage.clear()
     this.router.navigate(['/login']);
   }
 }
